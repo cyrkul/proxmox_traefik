@@ -4,10 +4,16 @@ services:
     container_name: TraefikProxy
     restart: unless-stopped
     image: traefik:latest
+    command: --api.insecure=true --providers.docker
     ports:
       - '80:80'
       - '8080:8080'
-      - '443:443'
     volumes:
-      - '/home/traefik/traefik:/etc/traefik/traefik'
+      - '/home/traefik:/etc/traefik'
       # - '/home/traefik/data:/data'
+  whoami:
+    # A container that exposes an API to show its IP address
+    container_name: WhoAmI
+    image: traefik/whoami
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
