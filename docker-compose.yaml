@@ -1,19 +1,28 @@
 version: '3'
+
 services:
+
   traefik_proxy:
     container_name: TraefikProxy
     restart: unless-stopped
     image: traefik:latest
-    command: --api.insecure=true --providers.docker
+    environment:
+      CF_API_EMAIL: 'YOUR@EMAIL.COM'
+      CF_DNS_API_TOKEN: 'YOUR_CLOUDFLARE_TOKEN'
     ports:
       - '80:80'
+      - '443:443'
       - '8080:8080'
     volumes:
-      - '/home/traefik:/etc/traefik'
-      # - '/home/traefik/data:/data'
+      - /home/traefik:/etc/traefik
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
   whoami:
-    # A container that exposes an API to show its IP address
     container_name: WhoAmI
     image: traefik/whoami
     labels:
-      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.noofny.me`)"
+      - "traefik.http.routers.whoami.entrypoints=web,websecure"
+      - "traefik.http.routers.whoami.tls=true"
+      - "traefik.http.routers.whoami.tls.certresolver=noofny_certs"
