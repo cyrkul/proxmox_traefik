@@ -19,6 +19,10 @@ mkdir -p /home/traefik
 cd /home/traefik
 cp /docker-compose.yaml /home/traefik/docker-compose.yaml
 cp /traefik.yaml /home/traefik/traefik.yaml
+echo "listing folder /"
+ls -lha /
+echo "listing folder /home/traefik"
+ls -lha /home/traefik
 
 
 echo "Creating stack..."
