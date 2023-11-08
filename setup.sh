@@ -2,6 +2,10 @@
 
 
 # functions
+function fatal() {
+    echo -e "\e[91m[FATAL] $1\e[39m"
+    exit 1
+}
 function error() {
     echo -e "\e[91m[ERROR] $1\e[39m"
 }
@@ -86,7 +90,7 @@ pct create "${CONTAINER_ID}" "${TEMPLATE_STRING}" \
     -password ${HOSTPASS} \
     -storage "${STORAGE}" \
     --unprivileged 1 \
-    || exit 1
+    || fatal "Failed to create container!"
 
 
 # Start container
@@ -95,8 +99,7 @@ pct start "${CONTAINER_ID}" || exit 1
 sleep 5
 CONTAINER_STATUS=$(pct status $CONTAINER_ID)
 if [ ${CONTAINER_STATUS} != "status: running" ]; then
-    error "Container ${CONTAINER_ID} is not running! status=${CONTAINER_STATUS}"
-    exit 1
+    fatal "Container ${CONTAINER_ID} is not running! status=${CONTAINER_STATUS}"
 fi
 
 
@@ -106,7 +109,7 @@ wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/setup_o
 info "Executing script..."
 cat ./setup_os.sh
 pct push "${CONTAINER_ID}" ./setup_os.sh /setup_os.sh -perms 755
-pct exec "${CONTAINER_ID}" -- bash -c "/setup_os.sh"
+pct exec "${CONTAINER_ID}" -- bash -c "/setup_os.sh" || fatal "Failed to exec: 'setup_os.sh'"
 pct reboot "${CONTAINER_ID}"
 
 
@@ -116,20 +119,23 @@ wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/setup_d
 info "Executing script..."
 cat ./setup_docker.sh
 pct push "${CONTAINER_ID}" ./setup_docker.sh /setup_docker.sh -perms 755
-pct exec "${CONTAINER_ID}" -- bash -c "/setup_docker.sh"
+pct exec "${CONTAINER_ID}" -- bash -c "/setup_docker.sh" || fatal "Failed to exec: 'setup_docker.sh'"
 pct reboot "${CONTAINER_ID}"
 
 
 # Setup Traefik
 info "Fetching setup script..."
-wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/setup_traefik.sh
-wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/docker-compose.yaml
+wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/setup_traefik.sh || fatal "Failed to download 'setup_traefik.sh'"
+wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/docker-compose.yaml || fatal "Failed to download 'docker-compose.yaml'"
+
+wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/traefik.yaml || fatal "Failed to download 'traefik.yaml'"
+
 info "Executing script..."
 cat ./setup_traefik.sh
-pct push "${CONTAINER_ID}" ./setup_traefik.sh /setup_traefik.sh -perms 755
-pct push "${CONTAINER_ID}" ./docker-compose.yaml /docker-compose.yaml
-pct push "${CONTAINER_ID}" ./traefik.yaml /traefik.yaml
-pct exec "${CONTAINER_ID}" -- bash -c "/setup_traefik.sh"
+pct push "${CONTAINER_ID}" ./setup_traefik.sh /setup_traefik.sh -perms 755 || fatal "Failed to push file to VM: 'setup_traefik.sh'"
+pct push "${CONTAINER_ID}" ./docker-compose.yaml /docker-compose.yaml || fatal "Failed to push file to VM: 'docker-compose.yaml'"
+pct push "${CONTAINER_ID}" ./traefik.yaml /traefik.yaml || fatal "Failed to push file to VM: 'traefik.yaml '"
+pct exec "${CONTAINER_ID}" -- bash -c "/setup_traefik.sh" || fatal "Failed to exec: 'setup_traefik.sh'"
 pct reboot "${CONTAINER_ID}"
 
 
