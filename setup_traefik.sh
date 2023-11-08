@@ -15,11 +15,10 @@ sed -e '/SendEnv/ s/^#*/#/' -i /etc/ssh/ssh_config
 
 
 echo "Creating folders..."
-mkdir -p /home/traefik/data
-mkdir -p /home/traefik/letsencrypt
+mkdir -p /home/traefik
 cd /home/traefik
-mv /docker-compose.yaml /home/traefik/docker-compose.yaml
-mv /traefik.yaml /home/traefik/traefik.yaml
+cp /docker-compose.yaml /home/traefik/docker-compose.yaml
+cp /traefik.yaml /home/traefik/traefik.yaml
 
 
 echo "Creating stack..."
