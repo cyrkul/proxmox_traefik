@@ -8,7 +8,7 @@
 
 Create a [ProxMox](https://www.proxmox.com/en/) LXC container running Ubuntu and install [Traefik Proxy](https://doc.traefik.io/traefik/) on [Docker](https://www.docker.com/).
 
-Tested on ProxMox v7, Docker 20.10 & Traefik 2.10
+Tested on ProxMox 8 & Traefik 3
 
 ## Usage
 
