@@ -15,5 +15,5 @@ Tested on ProxMox 8 & Traefik 3
 SSH to your ProxMox server as a privileged user and run...
 
 ```shell
-bash -c "$(wget --no-cache -qLO - https://raw.githubusercontent.com/noofny/proxmox_traefik/master/setup.sh)"
+bash -c "$(wget --no-cache -qLO - https://raw.githubusercontent.com/cloudgprabhu/proxmox_traefik/master/setup.sh)"
 ```
