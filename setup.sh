@@ -105,7 +105,7 @@ fi
 
 # Setup OS
 info "Fetching setup script..."
-wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/setup_os.sh
+wget -qL https://raw.githubusercontent.com/cloudgprabhu/proxmox_traefik/master/setup_os.sh
 info "Executing script..."
 cat ./setup_os.sh
 pct push "${CONTAINER_ID}" ./setup_os.sh /setup_os.sh -perms 755
@@ -115,7 +115,7 @@ pct reboot "${CONTAINER_ID}"
 
 # Setup Docker
 info "Fetching setup script..."
-wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/setup_docker.sh
+wget -qL https://raw.githubusercontent.com/cloudgprabhu/proxmox_traefik/master/setup_docker.sh
 info "Executing script..."
 cat ./setup_docker.sh
 pct push "${CONTAINER_ID}" ./setup_docker.sh /setup_docker.sh -perms 755
@@ -125,10 +125,10 @@ pct reboot "${CONTAINER_ID}"
 
 # Setup Traefik
 info "Fetching setup script..."
-wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/setup_traefik.sh || fatal "Failed to download 'setup_traefik.sh'"
+wget -qL https://raw.githubusercontent.com/cloudgprabhu/proxmox_traefik/master/setup_traefik.sh || fatal "Failed to download 'setup_traefik.sh'"
 wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/docker-compose.yaml || fatal "Failed to download 'docker-compose.yaml'"
 
-wget -qL https://raw.githubusercontent.com/noofny/proxmox_traefik/master/traefik.yaml || fatal "Failed to download 'traefik.yaml'"
+wget -qL https://raw.githubusercontent.com/cloudgprabhu/proxmox_traefik/master/traefik.yaml || fatal "Failed to download 'traefik.yaml'"
 
 info "Executing script..."
 cat ./setup_traefik.sh
