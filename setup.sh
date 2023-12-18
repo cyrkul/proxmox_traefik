@@ -50,7 +50,7 @@ info "Using OS: ${CONTAINER_OS_STRING}"
 CONTAINER_ARCH=$(dpkg --print-architecture)
 mapfile -t TEMPLATES < <(pveam available -section system | sed -n "s/.*\($CONTAINER_OS_STRING.*\)/\1/p" | sort -t - -k 2 -V)
 TEMPLATE="${TEMPLATES[-1]}"
-TEMPLATE_STRING="remote:vztmpl/${TEMPLATE}"
+TEMPLATE_STRING="local:vztmpl/${TEMPLATE}"
 info "Using template: ${TEMPLATE_STRING}"
 
 
