@@ -3,7 +3,7 @@
 
 # locale
 echo "Setting locale..."
-LOCALE_VALUE="en_AU.UTF-8"
+LOCALE_VALUE="pl_PL.UTF-8"
 echo ">>> locale-gen..."
 locale-gen ${LOCALE_VALUE}
 cat /etc/default/locale
